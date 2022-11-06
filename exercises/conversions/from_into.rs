@@ -33,10 +33,35 @@ impl Default for Person {
 // If while parsing the age, something goes wrong, then return the default of Person
 // Otherwise, then return an instantiated Person object with the results
 
-// I AM NOT DONE
+
+fn is_numeric(s:&str) -> bool {
+    let test = &s.parse::<f64>();
+    match test {
+        Ok(_) => true,
+        Err(_) => false,
+    }
+}
 
 impl From<&str> for Person {
     fn from(s: &str) -> Person {
+        if s.len() == 0 {
+            Person::default()
+        }
+        else {
+            let data: Vec<&str> = s.split(",").collect();
+            if data.len() == 2 {
+                if is_numeric(data[1]) && data[0].len()>0 {
+                    Person {
+                        name: String::from(data[0]),
+                        age: data[1].parse::<usize>().unwrap(),
+                    }
+                } else {
+                    Person::default()
+                }
+            } else {
+                Person::default()
+            }
+        }
     }
 }
 
